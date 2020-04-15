@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/models/todo.dart';
-import 'package:todo_app/utils/dbHelper.dart';
 import 'package:todo_app/screens/todoList.dart';
 
 void main() => runApp(MyApp());
