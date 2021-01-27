@@ -23,7 +23,7 @@ class DbHelper {
   static Database _db;
 
   Future<Database> get db async {
-    if(_db == null) {
+    if (_db == null) {
       _db = await initDb();
     }
 
@@ -33,7 +33,11 @@ class DbHelper {
   Future<Database> initDb() async {
     Directory dir = await getApplicationDocumentsDirectory();
     String path = dir.path + "todos.db";
-    var dbTodos = await openDatabase(path, version: 1, onCreate: _createDb);
+    var dbTodos = await openDatabase(
+      path,
+      version: 1,
+      onCreate: _createDb,
+    );
 
     return dbTodos;
   }
@@ -41,21 +45,26 @@ class DbHelper {
   void _createDb(Database db, int newVersion) async {
     await db.execute(
       "CREATE TABLE $tableTodo($columnId INTEGER PRIMARY KEY, " +
-        "$columnTitle TEXT, $columnDescription TEXT, $columnDate TEXT, " +
-        "$columnPriority INTEGER)"
+          "$columnTitle TEXT, $columnDescription TEXT, $columnDate TEXT, " +
+          "$columnPriority INTEGER)",
     );
   }
 
   Future<int> insertTodo(Todo todo) async {
     Database db = await this.db;
-    var result = await db.insert(tableTodo, todo.toMap());
+    var result = await db.insert(
+      tableTodo,
+      todo.toMap(),
+    );
 
     return result;
   }
 
   Future<List> getTodos() async {
     Database db = await this.db;
-    var result = await db.rawQuery("SELECT * FROM $tableTodo order by $columnPriority ASC");
+    var result = await db.rawQuery(
+      "SELECT * FROM $tableTodo order by $columnPriority ASC",
+    );
 
     return result;
   }
@@ -63,7 +72,9 @@ class DbHelper {
   Future<int> getCount() async {
     Database db = await this.db;
     var result = Sqflite.firstIntValue(
-      await db.rawQuery("select count (*) from $tableTodo")
+      await db.rawQuery(
+        "select count (*) from $tableTodo",
+      ),
     );
 
     return result;
@@ -71,17 +82,22 @@ class DbHelper {
 
   Future<int> updateTodo(Todo todo) async {
     Database db = await this.db;
-    var result = await db.update(tableTodo, todo.toMap(),
-      where: "$columnId = ?", whereArgs: [todo.id]);
+    var result = await db.update(
+      tableTodo,
+      todo.toMap(),
+      where: "$columnId = ?",
+      whereArgs: [todo.id],
+    );
 
     return result;
   }
 
   Future<int> deleteTodo(int id) async {
     Database db = await this.db;
-    var result = await db.rawDelete("DELETE FROM $tableTodo WHERE $columnId = $id");
+    var result = await db.rawDelete(
+      "DELETE FROM $tableTodo WHERE $columnId = $id",
+    );
 
     return result;
   }
-  
 }

@@ -26,6 +26,7 @@ class _TodoDetailsState extends State<TodoDetails> {
   Todo todo;
   _TodoDetailsState(this.todo);
   final _priorities = ["High", "Medium", "Low"];
+  // ignore: unused_field
   String _priority = "Low";
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -34,7 +35,7 @@ class _TodoDetailsState extends State<TodoDetails> {
   Widget build(BuildContext context) {
     titleController.text = todo.title;
     descriptionController.text = todo.description;
-    TextStyle textStyle = Theme.of(context).textTheme.title;
+    TextStyle textStyle = Theme.of(context).textTheme.headline6;
 
     return Scaffold(
       appBar: AppBar(
@@ -78,8 +79,8 @@ class _TodoDetailsState extends State<TodoDetails> {
                   padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
                   child: TextField(
                     onChanged: (value) {
-                    this.updateDescription();
-                  },
+                      this.updateDescription();
+                    },
                     controller: descriptionController,
                     style: textStyle,
                     decoration: InputDecoration(

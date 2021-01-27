@@ -1,4 +1,8 @@
 # This is a generated file; do not edit or check into version control.
-path_provider=C:\\Native\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\path_provider-1.6.5\\
+path_provider=C:\\Native\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\path_provider-1.6.11\\
+path_provider_linux=C:\\Native\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\path_provider_linux-0.0.1+2\\
 path_provider_macos=C:\\Native\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\path_provider_macos-0.0.4\\
-sqflite=C:\\Native\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\sqflite-1.3.0\\
+shared_preferences=C:\\Native\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\shared_preferences-0.5.7+3\\
+shared_preferences_macos=C:\\Native\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\shared_preferences_macos-0.0.1+10\\
+shared_preferences_web=C:\\Native\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\shared_preferences_web-0.1.2+7\\
+sqflite=C:\\Native\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\sqflite-1.3.1\\

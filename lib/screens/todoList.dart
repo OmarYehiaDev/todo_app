@@ -15,45 +15,56 @@ class _TodoListState extends State<TodoList> {
 
   @override
   Widget build(BuildContext context) {
-    ListView TodoListItems() {
-      return ListView.builder(
-        itemCount: count,
-        itemBuilder: (BuildContext context, int position) {
-          return Card(
-            color: Colors.white,
-            elevation: 2.0,
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: getColor(this.todos[position].priority),
-                child: Text(this.todos[position].priority.toString()),
-              ),
-              title: Text(this.todos[position].title),
-              subtitle: Text(this.todos[position].date),
-              onTap: () {
-                debugPrint("Tapped on " + this.todos[position].id.toString());
-                navigateToDetails(this.todos[position]);
-              },
-            ),
-          );
-        },
-      );
-    }
-
     if (todos == null) {
       todos = List<Todo>();
       getData();
     }
 
     return Scaffold(
-      body: TodoListItems(),
+      body: todos.length == null
+          ? Center(
+              child: Text("Add a todo"),
+            )
+          : ListView.builder(
+              itemCount: count,
+              itemBuilder: (BuildContext context, int position) {
+                return Card(
+                  elevation: 2.0,
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: getColor(
+                        this.todos[position].priority,
+                      ),
+                      child: Text(
+                        this.todos[position].priority.toString(),
+                      ),
+                    ),
+                    title: Text(
+                      this.todos[position].title,
+                    ),
+                    subtitle: Text(
+                      this.todos[position].date,
+                    ),
+                    onTap: () {
+                      debugPrint(
+                        "Tapped on " + this.todos[position].id.toString(),
+                      );
+                      navigateToDetails(
+                        this.todos[position],
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           navigateToDetails(
             Todo(
               '',
               3,
-              ''
-            )
+              '',
+            ),
           );
         },
         tooltip: "Add new todo",
@@ -64,22 +75,36 @@ class _TodoListState extends State<TodoList> {
 
   void getData() {
     final dbFuture = helper.initDb();
-    dbFuture.then((result) {
-      final todosFuture = helper.getTodos();
-      todosFuture.then((result) {
-        List<Todo> todoList = List<Todo>();
-        count = result.length;
-        for (int i = 0; i < count; i++) {
-          todoList.add(Todo.fromObject(result[i]));
-          debugPrint(todoList[i].title);
-        }
-        setState(() {
-          todos = todoList;
-          count = count;
-        });
-        debugPrint("Items " + count.toString());
-      });
-    });
+    dbFuture.then(
+      (result) {
+        final todosFuture = helper.getTodos();
+        todosFuture.then(
+          (result) {
+            List<Todo> todoList = List<Todo>();
+            count = result.length;
+            for (int i = 0; i < count; i++) {
+              todoList.add(
+                Todo.fromObject(
+                  result[i],
+                ),
+              );
+              debugPrint(
+                todoList[i].title,
+              );
+            }
+            setState(
+              () {
+                todos = todoList;
+                count = count;
+              },
+            );
+            debugPrint(
+              "Items " + count.toString(),
+            );
+          },
+        );
+      },
+    );
   }
 
   Color getColor(int priority) {
@@ -105,7 +130,7 @@ class _TodoListState extends State<TodoList> {
         builder: (context) => TodoDetails(todo),
       ),
     );
-    if (result = true) {
+    if (result == true) {
       getData();
     }
   }
