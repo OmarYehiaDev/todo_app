@@ -14,16 +14,20 @@ class _TodoListState extends State<TodoList> {
   int count = 0;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     if (todos == null) {
       todos = List<Todo>();
       getData();
     }
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: todos.length == null
+      body: todos.length == 0
           ? Center(
-              child: Text("Add a todo"),
+              child: Text("Add a todo!"),
             )
           : ListView.builder(
               itemCount: count,
@@ -37,12 +41,16 @@ class _TodoListState extends State<TodoList> {
                       ),
                       child: Text(
                         this.todos[position].priority.toString(),
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
                     title: Text(
                       this.todos[position].title,
                     ),
                     subtitle: Text(
+                      this.todos[position].description,
+                    ),
+                    trailing: Text(
                       this.todos[position].date,
                     ),
                     onTap: () {
