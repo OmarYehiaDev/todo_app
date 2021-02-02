@@ -1,42 +1,65 @@
 import 'package:flutter/material.dart';
-import 'package:package_info/package_info.dart';
+import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
+import 'package:todo_app/screens/appDrawer.dart';
 import 'package:todo_app/screens/todoList.dart';
+import 'package:todo_app/utils/constants.dart';
+import 'package:todo_app/utils/sharedPrefsUtils.dart';
+import 'package:todo_app/utils/theme/themeProvider.dart';
+import 'package:todo_app/widgets/themeSwitch.dart';
+import 'package:package_info/package_info.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SharedPrefsUtils.init();
+  final SharedPrefsUtils _sharedPrefs = SharedPrefsUtils.getInstance();
+  var isDarkTheme = _sharedPrefs.getData(SharedPreferencesKeys.isDarkTheme);
+  ThemeData theme;
+  if (isDarkTheme != null) {
+    theme = isDarkTheme ? kDarkTheme : kLightTheme;
+  } else {
+    theme = kLightTheme;
+  }
+  runApp(
+    MultiProvider(
+      providers: <SingleChildWidget>[
+        ChangeNotifierProvider<ThemeNotifier>(
+          create: (_) => ThemeNotifier(theme),
+        ),
+      ],
+      child: MyApp(),
+    ),
+  );
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Todo App',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
+      title: 'Simple Todo',
+      theme: themeData(context),
       debugShowCheckedModeBanner: false,
-      home: MyHomePage(title: 'Todos'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String appName, version, buildNumber;
   @override
   void initState() {
-    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-      appName = packageInfo.appName;
-      version = packageInfo.version;
-      buildNumber = packageInfo.buildNumber;
-    });
+    PackageInfo.fromPlatform().then(
+      (PackageInfo packageInfo) {
+        appName = packageInfo.appName;
+        version = packageInfo.version;
+        buildNumber = packageInfo.buildNumber;
+      },
+    );
     super.initState();
   }
 
@@ -44,29 +67,18 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text("Todos"),
         actions: [
-          IconButton(
-            icon: Icon(Icons.info),
-            onPressed: () {
-              showAboutDialog(
-                context: context,
-                applicationName: appName,
-                applicationVersion: "$version+$buildNumber",
-                applicationIcon: CircleAvatar(
-                  backgroundImage: AssetImage("assets/images/to-do-list.png"),
-                ),
-                children: [
-                  Text(
-                    "All rights reserved to Omar Yehia and © 2021 SpiderDevsTechnologies Inc.",
-                  ),
-                ],
-              );
-            },
-          ),
+          ThemeSwitch(),
         ],
       ),
       body: TodoList(),
+      drawer: AppDrawer(),
     );
   }
+}
+
+ThemeData themeData(context) {
+  final themeNotifier = Provider.of<ThemeNotifier>(context);
+  return themeNotifier.getTheme();
 }

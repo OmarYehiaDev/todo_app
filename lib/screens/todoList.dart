@@ -32,35 +32,67 @@ class _TodoListState extends State<TodoList> {
           : ListView.builder(
               itemCount: count,
               itemBuilder: (BuildContext context, int position) {
-                return Card(
-                  elevation: 2.0,
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: getColor(
-                        this.todos[position].priority,
+                final todo = this.todos[position];
+                return Dismissible(
+                  direction: DismissDirection.startToEnd,
+                  background: Container(
+                    color: Colors.red,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0,
                       ),
-                      child: Text(
-                        this.todos[position].priority.toString(),
-                        style: TextStyle(color: Colors.white),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 2.0,
+                            ),
+                            child: Icon(Icons.delete),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 2.0,
+                            ),
+                            child: Text("Delete"),
+                          ),
+                        ],
                       ),
                     ),
-                    title: Text(
-                      this.todos[position].title,
+                  ),
+                  key: Key(
+                    todo.id.toString(),
+                  ),
+                  child: Card(
+                    elevation: 2.0,
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: getColor(
+                          todo.priority,
+                        ),
+                        child: Text(
+                          todo.priority.toString(),
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      title: Text(
+                        todo.title,
+                      ),
+                      subtitle: Text(
+                        todo.description,
+                      ),
+                      trailing: Text(
+                        todo.date,
+                      ),
+                      onTap: () {
+                        debugPrint(
+                          "Tapped on " + todo.id.toString(),
+                        );
+                        navigateToDetails(
+                          todo,
+                        );
+                      },
                     ),
-                    subtitle: Text(
-                      this.todos[position].description,
-                    ),
-                    trailing: Text(
-                      this.todos[position].date,
-                    ),
-                    onTap: () {
-                      debugPrint(
-                        "Tapped on " + this.todos[position].id.toString(),
-                      );
-                      navigateToDetails(
-                        this.todos[position],
-                      );
-                    },
                   ),
                 );
               },
@@ -96,18 +128,12 @@ class _TodoListState extends State<TodoList> {
                   result[i],
                 ),
               );
-              debugPrint(
-                todoList[i].title,
-              );
             }
             setState(
               () {
                 todos = todoList;
                 count = count;
               },
-            );
-            debugPrint(
-              "Items " + count.toString(),
             );
           },
         );
