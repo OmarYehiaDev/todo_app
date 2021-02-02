@@ -4,14 +4,9 @@ import 'package:todo_app/utils/dbHelper.dart';
 import 'package:intl/intl.dart';
 
 DbHelper helper = DbHelper();
-final List<String> choices = const <String>[
-  "Save Todo & Back",
-  "Delete Todo",
-  "Back to List"
-];
+final List<String> choices = const <String>["Save Todo & Back", "Back to List"];
 
 const menuSave = "Save Todo & Back";
-const menuDelete = "Delete Todo";
 const menuBack = "Back to List";
 
 class TodoDetails extends StatefulWidget {
@@ -45,12 +40,14 @@ class _TodoDetailsState extends State<TodoDetails> {
           PopupMenuButton<String>(
             onSelected: select,
             itemBuilder: (BuildContext context) {
-              return choices.map((String choice) {
-                return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
-                );
-              }).toList();
+              return choices.map(
+                (String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                },
+              ).toList();
             },
           )
         ],
@@ -116,27 +113,9 @@ class _TodoDetailsState extends State<TodoDetails> {
   }
 
   void select(String value) async {
-    int result;
     switch (value) {
       case menuSave:
         save();
-        break;
-      case menuDelete:
-        Navigator.pop(context, true);
-        if (todo.id == null) {
-          return;
-        }
-        result = await helper.deleteTodo(todo.id);
-        if (result != 0) {
-          AlertDialog alertDialog = AlertDialog(
-            title: Text("Delete Todo"),
-            content: Text("The Todo has been deleted"),
-          );
-          showDialog(
-            context: context,
-            builder: (_) => alertDialog,
-          );
-        }
         break;
       case menuBack:
         Navigator.pop(context, true);
@@ -178,10 +157,16 @@ class _TodoDetailsState extends State<TodoDetails> {
   }
 
   void updateTitle() {
-    todo.title = titleController.text;
+    String newTitle = titleController.text;
+    if (newTitle != null && newTitle != "") {
+      todo.title = newTitle;
+    }
   }
 
   void updateDescription() {
-    todo.description = descriptionController.text;
+    String newDescription = descriptionController.text;
+    if (newDescription != null && newDescription != "") {
+      todo.description = newDescription;
+    }
   }
 }

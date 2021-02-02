@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todo_app/models/todo.dart';
 import 'package:todo_app/screens/todoDetails.dart';
 import 'package:todo_app/utils/dbHelper.dart';
@@ -35,6 +36,20 @@ class _TodoListState extends State<TodoList> {
                 final todo = this.todos[position];
                 return Dismissible(
                   direction: DismissDirection.startToEnd,
+                  onDismissed: (direction) async {
+                    int result;
+                    result = await helper.deleteTodo(todo.id);
+                    this.todos.removeAt(position);
+                    if (result != 0) {
+                      Fluttertoast.showToast(
+                        msg: "The Todo has been deleted",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        textColor:
+                            Theme.of(context).primaryTextTheme.subtitle1.color,
+                      );
+                    }
+                  },
                   background: Container(
                     color: Colors.red,
                     child: Padding(
