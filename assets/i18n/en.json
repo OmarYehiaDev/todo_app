@@ -1,0 +1,26 @@
+{
+	"title": "Todos",
+	"addNew": "Add new todo",
+	"shareText": "Check out Simple Todo!\n https://play.google.com/store/apps/details?id=com.omar.todo_app",
+	"emptyList": "Add a todo!",
+	"share": "Share with friends",
+	"about": "About",
+	"todoTitle": "Todo title",
+	"delete": "Delete",
+	"todoDeletion": "The Todo has been deleted",
+	"todoDescrip": "Todo description",
+	"todoPriority": {
+		"priorityTitle": "Priority",
+		"high": "High",
+		"medium": "Medium",
+		"low": "Low"
+	},
+	"options": {
+		"save": "Save todo & back"
+	},
+	"settings": {
+		"lang": "Change Language",
+		"done": "Completed Todos"
+	},
+	"rights": "All rights reserved to Omar Yehia and © 2021 SpiderDevsTechnologies Inc."
+}

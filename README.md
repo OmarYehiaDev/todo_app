@@ -3,6 +3,8 @@
  
  This app is very simple to use :")
 
+ Download it [here](https://play.google.com/store/apps/details?id=com.omar.todo_app)
+
 ## Screenshots
 
 ### If you haven't made any todos yet

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todo_app/models/todo.dart';
 import 'package:todo_app/screens/todoDetails.dart';
+import 'package:todo_app/utils/appLocals.dart';
 import 'package:todo_app/utils/dbHelper.dart';
 
 class TodoList extends StatefulWidget {
@@ -25,10 +26,13 @@ class _TodoListState extends State<TodoList> {
 
   @override
   Widget build(BuildContext context) {
+    var appLocale = AppLocalizations.of(context);
     return Scaffold(
       body: todos.length == 0
           ? Center(
-              child: Text("Add a todo!"),
+              child: Text(
+                appLocale.translate("emptyList"),
+              ),
             )
           : ListView.builder(
               itemCount: count,
@@ -42,7 +46,7 @@ class _TodoListState extends State<TodoList> {
                     this.todos.removeAt(position);
                     if (result != 0) {
                       Fluttertoast.showToast(
-                        msg: "The Todo has been deleted",
+                        msg: appLocale.translate("todoDeletion"),
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.CENTER,
                         textColor:
@@ -69,7 +73,9 @@ class _TodoListState extends State<TodoList> {
                             padding: const EdgeInsets.symmetric(
                               horizontal: 2.0,
                             ),
-                            child: Text("Delete"),
+                            child: Text(
+                              appLocale.translate("delete"),
+                            ),
                           ),
                         ],
                       ),
@@ -112,7 +118,10 @@ class _TodoListState extends State<TodoList> {
                 );
               },
             ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
         onPressed: () {
           navigateToDetails(
             Todo(
@@ -122,8 +131,11 @@ class _TodoListState extends State<TodoList> {
             ),
           );
         },
-        tooltip: "Add new todo",
-        child: new Icon(Icons.add),
+        tooltip: appLocale.translate("addNew"),
+        icon: Icon(Icons.add),
+        label: Text(
+          appLocale.translate("addNew"),
+        ),
       ),
     );
   }

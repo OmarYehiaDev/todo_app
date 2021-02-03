@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:todo_app/screens/appDrawer.dart';
 import 'package:todo_app/screens/todoList.dart';
+import 'package:todo_app/utils/appLang.dart';
+import 'package:todo_app/utils/appLocals.dart';
 import 'package:todo_app/utils/constants.dart';
 import 'package:todo_app/utils/sharedPrefsUtils.dart';
 import 'package:todo_app/utils/theme/themeProvider.dart';
@@ -23,6 +26,9 @@ void main() async {
   runApp(
     MultiProvider(
       providers: <SingleChildWidget>[
+        ChangeNotifierProvider<AppLanguage>(
+          create: (_) => AppLanguage(),
+        ),
         ChangeNotifierProvider<ThemeNotifier>(
           create: (_) => ThemeNotifier(theme),
         ),
@@ -36,11 +42,26 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Simple Todo',
-      theme: themeData(context),
-      debugShowCheckedModeBanner: false,
-      home: MyHomePage(),
+    return Consumer<AppLanguage>(
+      builder: (context, model, child) {
+        model.fetchLocale();
+        return MaterialApp(
+          locale: model.appLocal,
+          supportedLocales: [
+            Locale('en', 'US'),
+            Locale('ar', ''),
+          ],
+          localizationsDelegates: [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          title: 'Simple Todo',
+          theme: themeData(context),
+          debugShowCheckedModeBanner: false,
+          home: MyHomePage(),
+        );
+      },
     );
   }
 }
@@ -65,9 +86,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var appLocale = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Todos"),
+        title: Text(
+          appLocale.translate("title"),
+        ),
         actions: [
           ThemeSwitch(),
         ],

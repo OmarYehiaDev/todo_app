@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:social_share/social_share.dart';
+import 'package:todo_app/utils/appLang.dart';
+import 'package:todo_app/utils/appLocals.dart';
 import 'package:todo_app/utils/constants.dart';
 
 class AppDrawer extends StatefulWidget {
@@ -16,6 +19,8 @@ class _AppDrawerState extends State<AppDrawer> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    var appLanguage = Provider.of<AppLanguage>(context);
+    var appLocale = AppLocalizations.of(context);
     return Drawer(
       child: SafeArea(
         child: Container(
@@ -32,12 +37,19 @@ class _AppDrawerState extends State<AppDrawer> {
                   //   title: Text("Memories"),
                   //   leading: Icon(Icons.restore),
                   // ),
-                  // ListTile(
-                  //   title: Text("Language"),
-                  //   leading: Icon(Icons.language),
-                  // ),
                   ListTile(
-                    title: Text("About"),
+                    title: Text(
+                      appLocale.translateMore("settings", "lang"),
+                    ),
+                    leading: Icon(Icons.language),
+                    onTap: () {
+                      appLanguage.changeLanguage();
+                    },
+                  ),
+                  ListTile(
+                    title: Text(
+                      appLocale.translate("about"),
+                    ),
                     leading: Icon(Icons.info),
                     onTap: () {
                       showAboutDialog(
@@ -50,18 +62,20 @@ class _AppDrawerState extends State<AppDrawer> {
                         ),
                         children: [
                           Text(
-                            "All rights reserved to Omar Yehia and © 2021 SpiderDevsTechnologies Inc.",
+                            appLocale.translate("rights"),
                           ),
                         ],
                       );
                     },
                   ),
                   ListTile(
-                    title: Text("Share with friends"),
+                    title: Text(
+                      appLocale.translate("share"),
+                    ),
                     leading: Icon(Icons.share),
                     onTap: () {
                       SocialShare.shareOptions(
-                        "Check out Simple Todo!\n https://play.google.com/store/apps/details?id=com.omar.todo_app",
+                        appLocale.translate("shareText"),
                       );
                     },
                   ),

@@ -1,0 +1,26 @@
+{
+	"title": "المهام",
+	"addNew": "أضف مهمة",
+	"shareText": "حمّل تطبيق Simple Todo!\n https://play.google.com/store/apps/details?id=com.omar.todo_app",
+	"emptyList": "أضف مهمة جديدة!",
+	"share": "شاركه مع أصدقائك",
+	"about": "عن التطبيق",
+	"todoTitle": "اسم المهمة",
+	"delete": "حذف",
+	"todoDeletion": "تم حذف المهمة",
+	"todoDescrip": "وصف المهمة",
+	"todoPriority": {
+		"priorityTitle": "الأهمية",
+		"high": "مهم جدًا",
+		"medium": "متوسط الأهمية",
+		"low": "غير مهم"
+	},
+	"options": {
+		"save": "حفظ المهمة والرجوع"
+	},
+	"settings": {
+		"lang": "تغيير اللغة",
+		"done": "المهام المكتملة"
+	},
+	"rights": "جميع الحقوق محفوظة لدى Omar Yehia و © 2021 SpiderDevsTechnologies Inc."
+}
