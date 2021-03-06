@@ -27,7 +27,7 @@ class _ThemeSwitchState extends State<ThemeSwitch> {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     _darkTheme = (themeNotifier.getTheme() == kDarkTheme);
     return Switch(
-      activeColor: Theme.of(context).cursorColor,
+      activeColor: Theme.of(context).textSelectionTheme.cursorColor,
       onChanged: (value) {
         setState(() {
           _darkTheme = value;

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todo_app/models/todo.dart';
+import 'package:todo_app/utils/appLang.dart';
 import 'package:todo_app/utils/appLocals.dart';
 import 'package:todo_app/utils/dbHelper.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as intl;
 
 DbHelper helper = DbHelper();
-const menuSave = "Save Todo & Back";
-const menuBack = "Back to List";
 
 class TodoDetails extends StatefulWidget {
   final Todo todo;
@@ -35,6 +35,7 @@ class _TodoDetailsState extends State<TodoDetails> {
   @override
   Widget build(BuildContext context) {
     var appLocale = AppLocalizations.of(context);
+    var appLang = Provider.of<AppLanguage>(context);
     // ignore: unused_local_variable
     String _priority = appLocale.translateMore("todoPriority", "low");
     titleController.text = todo.title;
@@ -47,7 +48,9 @@ class _TodoDetailsState extends State<TodoDetails> {
     ];
 
     void save() {
-      todo.date = new DateFormat.yMd().format(DateTime.now());
+      todo.date = intl.DateFormat.yMd(
+        appLang.appLocal.languageCode,
+      ).add_jm().format(DateTime.now());
       if (todo.id != null) {
         helper.updateTodo(todo);
       } else {
@@ -86,8 +89,23 @@ class _TodoDetailsState extends State<TodoDetails> {
       String newDescription = descriptionController.text;
       if (newDescription != null && newDescription != "") {
         todo.description = newDescription;
+      } else {
+        print("Can't be saved");
       }
     }
+
+    TextDirection textDir() {
+      if (appLang.appLocal == Locale("ar")) {
+        return TextDirection.rtl;
+      } else if (appLang.appLocal == Locale("en")) {
+        return TextDirection.ltr;
+      } else {
+        return TextDirection.ltr;
+      }
+    }
+
+    titleController.text = todo.title;
+    descriptionController.text = todo.description;
 
     return GestureDetector(
       ///* To unfocus from any TextField when user click anywhere
@@ -132,21 +150,21 @@ class _TodoDetailsState extends State<TodoDetails> {
                         style: textStyle,
                       ),
                     ),
-                    TextFormField(
+                    TextField(
+                      textDirection: textDir(),
+                      onChanged: (val) {
+                        updateTitle();
+                      },
                       controller: titleController,
                       focusNode: titleFocusNode,
                       style: textStyle,
-                      onFieldSubmitted: (val) {
-                        setState(() {
-                          titleController.text = val;
-                        });
+                      onEditingComplete: () {
                         titleFocusNode.unfocus();
                         updateTitle();
                         descriptionFocusNode.requestFocus();
                       },
                       decoration: InputDecoration(
-                        labelStyle: textStyle,
-                        labelText: appLocale.translate("todoTitle"),
+                        hintText: appLocale.translate("todoTitle"),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0),
                         ),
@@ -164,20 +182,20 @@ class _TodoDetailsState extends State<TodoDetails> {
                         style: textStyle,
                       ),
                     ),
-                    TextFormField(
+                    TextField(
+                      textDirection: textDir(),
+                      onChanged: (val) {
+                        updateDescription();
+                      },
                       controller: descriptionController,
                       style: textStyle,
                       focusNode: descriptionFocusNode,
-                      onFieldSubmitted: (val) {
-                        setState(() {
-                          descriptionController.text = val;
-                        });
+                      onEditingComplete: () {
                         updateDescription();
                         descriptionFocusNode.unfocus();
                       },
                       decoration: InputDecoration(
-                        labelStyle: textStyle,
-                        labelText: appLocale.translate("todoDescrip"),
+                        hintText: appLocale.translate("todoDescrip"),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0),
                         ),

@@ -16,6 +16,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPrefsUtils.init();
   final SharedPrefsUtils _sharedPrefs = SharedPrefsUtils.getInstance();
+  AppLanguage appLanguage = AppLanguage();
+  await appLanguage.fetchLocale();
   var isDarkTheme = _sharedPrefs.getData(SharedPreferencesKeys.isDarkTheme);
   ThemeData theme;
   if (isDarkTheme != null) {
@@ -27,41 +29,42 @@ void main() async {
     MultiProvider(
       providers: <SingleChildWidget>[
         ChangeNotifierProvider<AppLanguage>(
-          create: (_) => AppLanguage(),
+          create: (_) => appLanguage,
         ),
         ChangeNotifierProvider<ThemeNotifier>(
           create: (_) => ThemeNotifier(theme),
         ),
       ],
-      child: MyApp(),
+      child: MyApp(
+        appLang: appLanguage,
+      ),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+  final AppLanguage appLang;
+  MyApp({this.appLang});
   @override
   Widget build(BuildContext context) {
     return Consumer<AppLanguage>(
-      builder: (context, model, child) {
-        model.fetchLocale();
-        return MaterialApp(
-          locale: model.appLocal,
-          supportedLocales: [
-            Locale('en', 'US'),
-            Locale('ar', ''),
-          ],
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
-          title: 'Simple Todo',
-          theme: themeData(context),
-          debugShowCheckedModeBanner: false,
-          home: MyHomePage(),
-        );
-      },
+      builder: (context, model, child) => MaterialApp(
+        locale: appLang.appLocal,
+        supportedLocales: [
+          Locale('en', 'US'),
+          Locale('ar', ''),
+        ],
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        title: 'Simple Todo',
+        theme: themeData(context),
+        debugShowCheckedModeBanner: false,
+        home: MyHomePage(),
+      ),
     );
   }
 }

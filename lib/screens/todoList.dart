@@ -19,7 +19,7 @@ class _TodoListState extends State<TodoList> {
   void initState() {
     super.initState();
     if (todos == null) {
-      todos = List<Todo>();
+      todos = [];
       getData();
     }
   }
@@ -43,7 +43,9 @@ class _TodoListState extends State<TodoList> {
                   onDismissed: (direction) async {
                     int result;
                     result = await helper.deleteTodo(todo.id);
-                    this.todos.removeAt(position);
+                    setState(() {
+                      this.todos.removeAt(position);
+                    });
                     if (result != 0) {
                       Fluttertoast.showToast(
                         msg: appLocale.translate("todoDeletion"),
@@ -147,7 +149,7 @@ class _TodoListState extends State<TodoList> {
         final todosFuture = helper.getTodos();
         todosFuture.then(
           (result) {
-            List<Todo> todoList = List<Todo>();
+            List<Todo> todoList = [];
             count = result.length;
             for (int i = 0; i < count; i++) {
               todoList.add(

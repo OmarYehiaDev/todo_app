@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 final ThemeData kDarkTheme = ThemeData.dark().copyWith(
   accentColor: Colors.white,
-  textSelectionHandleColor: Colors.white,
-  textSelectionColor: Colors.white,
+  textSelectionTheme: TextSelectionThemeData(
+    selectionHandleColor: Colors.white,
+    selectionColor: Colors.white,
+  ),
   inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
